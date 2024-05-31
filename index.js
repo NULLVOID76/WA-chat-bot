@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 
 
 const app =express().use(bodyParser.json());
-let MY_TOKEN="Tech_titans"
+let MY_TOKEN="Tech_titans";
 app.listen(process.env.PORT,()=>{
     console.log(`wehook server is ready ${process.env.PORT}`);
 })
