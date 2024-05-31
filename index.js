@@ -7,6 +7,8 @@ const app =express().use(bodyParser.json());
 
 // let MY_TOKEN="Tech_titans";
 
+// "start": "node --env-file .env index.js"
+
 
 app.listen(process.env.PORT,()=>{
     console.log(`wehook server is ready ${process.env.PORT}`);
