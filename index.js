@@ -45,8 +45,7 @@ app.post("/webhook", (req, res) => {
       let name = body_param.entry[0].changes[0].value.contacts[0].profile.name;
       let msg_body = body_param.entry[0].changes[0].value.messages[0].text.body;
 
-      console.log(`from  ${from}, name ${name}`);
-      console.log(`body msg  ${msg_body}`);
+      console.log(`from  ${from} \nname ${name} \nbody msg  ${msg_body}`
 
       axios({
         method: "POST",
