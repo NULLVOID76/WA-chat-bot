@@ -59,7 +59,7 @@ app.get("/webhook",(req,res)=>{
                         messaging_product:"whatsapp",
                         to:from,
                         text:{
-                            body:"Hi.. I'm Prasath, your message is "+msg_body
+                            body:"Hi.. we're tech titans, your message is "+msg_body
                         }
                     },
                     headers:{
