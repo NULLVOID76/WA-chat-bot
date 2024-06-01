@@ -3,7 +3,7 @@ import axios from "axios";
 import bodyParser from "body-parser";
 
 const app = express().use(bodyParser.json());
-import detect from "./keyword";
+import detect from "./keyword.js";
 
 // let MY_TOKEN="Tech_titans";
 
