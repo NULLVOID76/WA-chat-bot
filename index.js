@@ -26,7 +26,7 @@ app.get("/webhook", (req, res) => {
 });
 
 app.post("/webhook", (req, res) => {
-  //i want some
+
 
   let body = req.body;
 
@@ -46,7 +46,9 @@ app.post("/webhook", (req, res) => {
       let msg_body = body.entry[0].changes[0].value.messages[0].text.body;
 
       console.log(`from  ${from} \nname ${name} \nbody msg  ${msg_body}`);
-
+      let mine;
+      if(msg_body=='collage')
+        mine="MMMUT Gorakhpur";
       axios({
         method: "POST",
         url: ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `,
@@ -54,7 +56,7 @@ app.post("/webhook", (req, res) => {
           messaging_product: "whatsapp",
           to: from,
           text: {
-            body: `Hello ${name} \nWe're tech titans, \nYour Message is > ${msg_body} `,
+            body: mine?mine:`Hello ${name} \nWe're tech titans, \nYour Message is > ${msg_body} `,
           },
         },
         headers: {
