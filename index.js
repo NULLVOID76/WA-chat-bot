@@ -30,7 +30,7 @@ app.post("/webhook", (req, res) => {
 
   let body = req.body;
 
-  console.log(JSON.stringify(body));
+  console.log(JSON.stringify(body,null,1));
 
   if (body.object) {
     // console.log("inside body param ${}");
