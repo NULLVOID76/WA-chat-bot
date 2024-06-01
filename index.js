@@ -3,6 +3,7 @@ import axios from "axios";
 import bodyParser from "body-parser";
 
 const app = express().use(bodyParser.json());
+import detect from "./keyword";
 
 // let MY_TOKEN="Tech_titans";
 
@@ -46,9 +47,8 @@ app.post("/webhook", (req, res) => {
       let msg_body = body.entry[0].changes[0].value.messages[0].text.body;
 
       console.log(`from  ${from} \nname ${name} \nbody msg  ${msg_body}`);
-      let mine;
-      if(msg_body=='collage')
-        mine="MMMUT Gorakhpur";
+      let msg;
+        msg=detect(msg_body);
       axios({
         method: "POST",
         url: ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `,
@@ -56,7 +56,7 @@ app.post("/webhook", (req, res) => {
           messaging_product: "whatsapp",
           to: from,
           text: {
-            body: mine?mine:`Hello ${name} \nWe're tech titans, \nYour Message is > ${msg_body} `,
+            body: msg?msg:`Hello ${name} \nWe're tech titans, \nYour Message is > ${msg_body} `,
           },
         },
         headers: {
