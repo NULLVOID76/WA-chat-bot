@@ -28,22 +28,22 @@ app.get("/webhook", (req, res) => {
 app.post("/webhook", (req, res) => {
   //i want some
 
-  let body_param = req.body;
+  let body = req.body;
 
-//   console.log(JSON.stringify(body_param, null, 2));
+  console.log(JSON.stringify(body));
 
-  if (body_param.object) {
-    // console.log("inside body param");
+  if (body.object) {
+    // console.log("inside body param ${}");
     if (
-      body_param.entry &&
-      body_param.entry[0].changes &&
-      body_param.entry[0].changes[0].value.messages &&
-      body_param.entry[0].changes[0].value.messages[0]
+      body.entry &&
+      body.entry[0].changes &&
+      body.entry[0].changes[0].value.messages &&
+      body.entry[0].changes[0].value.messages[0]
     ) 
     {
-      let from = body_param.entry[0].changes[0].value.messages[0].from;
-      let name = body_param.entry[0].changes[0].value.contacts[0].profile.name;
-      let msg_body = body_param.entry[0].changes[0].value.messages[0].text.body;
+      let from = body.entry[0].changes[0].value.messages[0].from;
+      let name = body.entry[0].changes[0].value.contacts[0].profile.name;
+      let msg_body = body.entry[0].changes[0].value.messages[0].text.body;
 
       console.log(`from  ${from} \nname ${name} \nbody msg  ${msg_body}`);
 
