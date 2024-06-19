@@ -27,11 +27,9 @@ app.get("/webhook", (req, res) => {
 });
 
 app.post("/webhook", (req, res) => {
-
-
   let body = req.body;
 
-  console.log(JSON.stringify(body,null,1));
+  console.log(JSON.stringify(body, null, 1));
 
   if (body.object) {
     // console.log("inside body param ${}");
@@ -40,15 +38,24 @@ app.post("/webhook", (req, res) => {
       body.entry[0].changes &&
       body.entry[0].changes[0].value.messages &&
       body.entry[0].changes[0].value.messages[0]
-    ) 
-    {
+    ) {
+      axios({
+        method: "PUT",
+        url: ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `,
+        data: {
+          messaging_product: "whatsapp",
+          status: "read",
+          message_id: `${body.entry[0].changes[0].value.messages[0].id}`,
+        },
+      });
+
       let from = body.entry[0].changes[0].value.messages[0].from;
       let name = body.entry[0].changes[0].value.contacts[0].profile.name;
       let msg_body = body.entry[0].changes[0].value.messages[0].text.body;
 
       console.log(`from  ${from} \nname ${name} \nbody msg  ${msg_body}`);
       let msg;
-        msg=detect(msg_body);
+      msg = detect(msg_body);
       axios({
         method: "POST",
         url: ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `,
@@ -56,7 +63,9 @@ app.post("/webhook", (req, res) => {
           messaging_product: "whatsapp",
           to: from,
           text: {
-            body: msg?msg:`Hello ${name} \nWe're tech titans, \nYour Message is > ${msg_body} `,
+            body: msg
+              ? msg
+              : `Hello ${name} \nWe're tech titans, \nYour Message is > ${msg_body} `,
           },
         },
         headers: {
@@ -64,9 +73,7 @@ app.post("/webhook", (req, res) => {
         },
       });
       res.sendStatus(200);
-    } 
-    else 
-    {
+    } else {
       res.sendStatus(404);
     }
   }
