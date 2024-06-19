@@ -40,19 +40,19 @@ app.post("/webhook", (req, res) => {
       body.entry[0].changes[0].value.messages[0]
     ) {
       axios({
-          method: "POST",
-          url: ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `,
-          data: {
-              messaging_product: "whatsapp",
+        method: "POST",
+        url: ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `,
+        data: {
+          messaging_product: "whatsapp",
           status: "read",
           message_id: `${body.entry[0].changes[0].value.messages[0].id}`,
         },
       });
-      
+
       let from = body.entry[0].changes[0].value.messages[0].from;
       let name = body.entry[0].changes[0].value.contacts[0].profile.name;
       let msg_body = body.entry[0].changes[0].value.messages[0].text.body;
-      
+
       console.log(`from  ${from} \nname ${name} \nbody msg  ${msg_body}`);
       let msg;
       msg = detect(msg_body);
@@ -62,15 +62,37 @@ app.post("/webhook", (req, res) => {
         data: {
           messaging_product: "whatsapp",
           to: from,
-          text: {
+          type: "template",
+          template: {
+            name: "greeting",
+            language: {
+              code: "en_GB",
+              policy: "deterministic",
+            },
+            components: [
+              {
+                type: "body",
+                parameters: [
+                  {
+                    type: "text",
+                    text: `${name}`,
+                  },
+                ],
+              },
+            ],
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+        /*
+         text: {
             body: msg
               ? msg
               : `Hello ${name} \nWe're tech titans, \nYour Message is > ${msg_body} `,
           },
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
+        */
+
       });
       res.sendStatus(200);
     } else {
