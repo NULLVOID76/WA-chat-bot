@@ -54,8 +54,8 @@ app.post("/webhook", (req, res) => {
       // let msg_body = body.entry[0].changes[0].value.messages[0].text.body;
 
       // console.log(`from  ${from} \nname ${name} \nbody msg  ${msg_body}`);
-      let msg;
-      msg = detect(msg_body);
+      // let msg;
+      // msg = detect(msg_body);
       axios({
         method: "POST",
         url: ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `,
