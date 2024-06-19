@@ -33,13 +33,13 @@ app.post("/webhook", (req, res) => {
   let Link=  ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `;
 
 
-  console.log(JSON.stringify(body, null, 1));
 
   if (body.object) {
     if (
       body.entry && body.entry[0].changes && body.entry[0].changes[0].value.messages && body.entry[0].changes[0].value.messages[0]
     ) {
-
+       
+  console.log(JSON.stringify(body, null, 1));
       let prev_msg_id= body.entry[0].changes[0].value.messages[0].id;
       axios({
         method: "POST",
