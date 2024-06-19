@@ -39,20 +39,18 @@ app.post("/webhook", (req, res) => {
       body.entry[0].changes[0].value.messages &&
       body.entry[0].changes[0].value.messages[0]
     ) {
-      axios({
-        method: "POST",
-        url: ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `,
-        data: {
-          messaging_product: "whatsapp",
-          status: "read",
-          message_id: `${body.entry[0].changes[0].value.messages[0].id}`,
-        },
-      });
-
+      // axios({
+      //   method: "POST",
+      //   url: ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `,
+      //   data: {
+      //     messaging_product: "whatsapp",
+      //   },
+      // });
+      
       let from = body.entry[0].changes[0].value.messages[0].from;
       let name = body.entry[0].changes[0].value.contacts[0].profile.name;
       let msg_body = body.entry[0].changes[0].value.messages[0].text.body;
-
+      
       console.log(`from  ${from} \nname ${name} \nbody msg  ${msg_body}`);
       let msg;
       msg = detect(msg_body);
@@ -61,6 +59,8 @@ app.post("/webhook", (req, res) => {
         url: ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `,
         data: {
           messaging_product: "whatsapp",
+          status: "read",
+          message_id: `${body.entry[0].changes[0].value.messages[0].id}`,
           to: from,
           text: {
             body: msg
