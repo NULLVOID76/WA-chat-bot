@@ -27,68 +27,75 @@ app.get("/webhook", (req, res) => {
 });
 
 app.post("/webhook", (req, res) => {
+
+
   let body = req.body;
+  let Link=  ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `;
+
 
   console.log(JSON.stringify(body, null, 1));
 
   if (body.object) {
-    // console.log("inside body param ${}");
     if (
-      body.entry &&
-      body.entry[0].changes &&
-      body.entry[0].changes[0].value.messages &&
-      body.entry[0].changes[0].value.messages[0]
+      body.entry && body.entry[0].changes && body.entry[0].changes[0].value.messages && body.entry[0].changes[0].value.messages[0]
     ) {
+
+      let prev_msg_id= body.entry[0].changes[0].value.messages[0].id;
       axios({
         method: "POST",
-        url: ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `,
+        url: Link,
         data: {
           messaging_product: "whatsapp",
           status: "read",
-          message_id: `${body.entry[0].changes[0].value.messages[0].id}`,
+          message_id: prev_msg_id,
         },
       });
 
       let from = body.entry[0].changes[0].value.messages[0].from;
       let name = body.entry[0].changes[0].value.contacts[0].profile.name;
-      // let msg_body = body.entry[0].changes[0].value.messages[0].text.body;
 
+
+
+      // let msg_body = body.entry[0].changes[0].value.messages[0].text.body;
       // console.log(`from  ${from} \nname ${name} \nbody msg  ${msg_body}`);
       // let msg;
       // msg = detect(msg_body);
+
+      let greeting = {
+        messaging_product: "whatsapp",
+        to: from,
+        context: {
+          message_id: prev_msg_id,
+        },
+        type: "template",
+        template: {
+          name: "greeting",
+          language: {
+            code: "en_GB",
+            policy: "deterministic",
+          },
+          components: [
+            {
+              type: "body",
+              parameters: [
+                {
+                  type: "text",
+                  text: `${name}`,
+                },
+              ],
+            },
+          ],
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      
+
       axios({
         method: "POST",
-        url: ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `,
-        data: {
-          messaging_product: "whatsapp",
-          to: from,
-          context: {
-            message_id: `${body.entry[0].changes[0].value.messages[0].id}`,
-          },
-
-          type: "template",
-          template: {
-            name: "greeting",
-            language: {
-              code: "en_GB",
-              policy: "deterministic",
-            },
-            components: [
-              {
-                type: "body",
-                parameters: [
-                  {
-                    type: "text",
-                    text: `${name}`,
-                  },
-                ],
-              },
-            ],
-          },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
+        url: Link,
+        data: greeting,
         /*
          text: {
             body: msg
@@ -103,3 +110,5 @@ app.post("/webhook", (req, res) => {
     }
   }
 });
+
+
