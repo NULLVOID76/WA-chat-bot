@@ -12,6 +12,9 @@ import detect from "./keyword.js";
 app.listen(process.env.PORT, () => {
   console.log(`wehook server is ready ${process.env.PORT}`);
 });
+app.get("/",(req,res)=>{
+  <h1>manvendra</h1>
+})
 app.get("/webhook", (req, res) => {
   let mode = req.query["hub.mode"];
   let challange = req.query["hub.challenge"];
