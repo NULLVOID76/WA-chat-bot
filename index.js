@@ -26,7 +26,7 @@ app.get("/webhook", (req, res) => {
 });
 
 app.post("/webhook", (req, res) => {
-  console.log("msgg\n");
+  // console.log("msgg\n");
 
   let body = req.body;
   let Link = ` https://graph.facebook.com/v13.0/${process.env.PHONE_NUMBER_ID}/messages?access_token=${process.env.TOKEN} `;
