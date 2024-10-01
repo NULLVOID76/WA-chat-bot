@@ -94,9 +94,7 @@ app.post("/webhook", (req, res) => {
           to: from,
           type: "text",
           text: {
-            body: msg
-              ? msg
-              : `Hello ${name} \nWe're tech titans, \nYour Message is > ${msg_body} `,
+            body:`Hello ${name} \nWe're tech titans, \nYour Message is > ${msg_body} `,
           },
         },
       });
